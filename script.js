@@ -5,7 +5,7 @@ class Process {
         this.tBurst = tBurst;
         this.remainTBurst = tBurst;
         this.isRunning = false;
-
+        this.latency = 0;
     }
 
     getState() {
@@ -17,6 +17,14 @@ class Process {
 
     canRun() {
         return (t >= this.tArrivo && this.remainTBurst > 0);
+    }
+
+    getLatency() {
+        return this.latency;
+    }
+
+    incrementLatency() {
+        this.latency++;
     }
 }
 
@@ -39,11 +47,16 @@ function reset() {
     process.forEach(p => {
         p.remainTBurst = p.tBurst;
         p.isRunning = false;
+        p.latency = 0;
     });
 
     tableEl.replaceChild(newTBodyEl, oldTBodyEl);
 
     document.getElementById("idTime").innerHTML = "";
+
+    document.getElementById("efficiencyCell").innerHTML = "0";
+    document.getElementById("waitingTimeCell").innerHTML = "0";
+    document.getElementById("turnaroundTimeCell").innerHTML = "0";
 }
 
 function start() {
@@ -58,6 +71,7 @@ function start() {
     process.forEach(p => {
         p.remainTBurst = p.tBurst;
         p.isRunning = false;
+        p.latency = 0;
     });
 
     for (let i = 0; i < process.length; i++) {
@@ -77,41 +91,64 @@ function start() {
     }
 
     tableEl.replaceChild(newTBodyEl, oldTBodyEl);
+
+    // Resetta la tabella delle statistiche a 0
+    document.getElementById("efficiencyCell").innerHTML = "0";
+    document.getElementById("waitingTimeCell").innerHTML = "0";
+    document.getElementById("turnaroundTimeCell").innerHTML = "0";
 }
 
 function step() {
+    // Esegui il calcolo FCFS solo al tempo t, solo se t è minore di maxTime
     fcfs();
     t++;
     document.getElementById("idTime").innerHTML = "Tempo: " + t;
-    stats(); // Calcola e aggiorna i dati ogni passo
+
+    // Controlla se tutti i processi sono completati (remainTBurst == 0)
+    let allProcessesTerminated = true;
+    for (let i = 0; i < process.length; i++) {
+        if (process[i].remainTBurst !== 0) {
+            allProcessesTerminated = false;
+            break;
+        }
+    }
+
+    // Calcola le statistiche solo quando tutti i processi sono terminati
+    if (allProcessesTerminated) {
+        stats();
+    }
 }
 
 function stats() {
-    let totalBurstTime = 0; // Tempo totale dei burst
-    let totalTurnaroundTime = 0; // Tempo totale di turnaround
-    let totalWaitingTime = 0; // Tempo totale di attesa
+    let totalBurstTime = 0; 
+    let totalTurnaroundTime = 0;
+    let totalWaitingTime = 0;
 
-    let currentTime = t; // Tempo corrente del simulatore
+    let currentTime = t; 
+    let minTime = Infinity;
 
-    process.forEach(p => {
-        totalBurstTime += p.tBurst; // Somma del tempo di burst totale di tutti i processi
+    for (let i = 0; i < process.length; i++) {
+        if (process[i].tArrivo < minTime) {
+            minTime = process[i].tArrivo;
+        }
+    }
+
+    for (let i = 0; i < process.length; i++) {
+        totalBurstTime += process[i].tBurst; 
 
         // Calcolo del tempo di turnaround: tempo attuale - tempo di arrivo
-        let turnaroundTime = Math.max(0, currentTime - p.tArrivo);
+        let turnaroundTime = Math.max(0, currentTime - process[i].tArrivo);
 
         // Calcolo del tempo di attesa: turnaround - tempo di burst
-        let waitingTime = turnaroundTime - p.tBurst;
+        let waitingTime = turnaroundTime - process[i].tBurst;
         if (waitingTime < 0) waitingTime = 0;
 
         totalTurnaroundTime += turnaroundTime;
         totalWaitingTime += waitingTime;
-    });
+    }
 
-    // Tempo massimo per evitare divisione per 0
-    const maxTime = Math.max(currentTime, totalBurstTime);
-
-    // Calcolo efficienza come rapporto tra tempo di burst effettivo e tempo totale trascorso
-    const efficiency = (totalBurstTime / maxTime) * 100;
+    // Calcolo efficienza: tempo di burst totale meno il tempo minimo diviso il tempo finale
+    const efficiency = ((totalBurstTime + minTime) / currentTime) * 100;
 
     // Calcolo dei tempi medi
     const mediumWaitingTime = totalWaitingTime / process.length;
@@ -133,11 +170,11 @@ function fcfs() {
     if (currentProcess === null || currentProcess.remainTBurst === 0) {
         currentProcess = null;
     
-        process.forEach(function(p) {
-            if (p.canRun() && (currentProcess === null || p.tArrivo < currentProcess.tArrivo)) {
-                currentProcess = p;
+        for (let i = 0; i < process.length; i++) {
+            if (process[i].canRun() && (currentProcess === null || process[i].tArrivo < currentProcess.tArrivo)) {
+                currentProcess = process[i];
             }
-        });
+        }
     }
 
     // Se abbiamo un processo in esecuzione, esegui un burst
@@ -148,53 +185,12 @@ function fcfs() {
     }
 
     // Aggiorna lo stato di tutti i processi
-    process.forEach((p, i) => {
-        if (p === currentProcess && p.remainTBurst > 0) {
-            p.isRunning = true;
+    for (let i = 0; i < process.length; i++) {
+        if (process[i] === currentProcess && process[i].remainTBurst > 0) {
+            process[i].isRunning = true;
         } else {
-            p.isRunning = false;
+            process[i].isRunning = false;
         }
-        document.getElementById("stateP" + i).innerHTML = p.getState();
-    });
-
-    for (let p of process) {
-        totalBurstTime += p.tBurst;
-        totalTurnaroundTime += p.turnaroundTime;
-        totalWaitingTime += p.waitingTime;
-    }
-
-    const efficiency = (totalBurstTime / t) * 100;
-    const avgWaitingTime = totalWaitingTime / process.length;
-    const avgTurnaroundTime = totalTurnaroundTime / process.length;
-
-    // Mostra le statistiche nella tabella
-    document.getElementById("efficiencyCell").innerHTML = efficiency.toFixed(2);
-    document.getElementById("waitingTimeCell").innerHTML = avgWaitingTime.toFixed(2);
-    document.getElementById("turnaroundTimeCell").innerHTML = avgTurnaroundTime.toFixed(2);
-    document.getElementById("statsTable").style.display = "table";
-
-    console.log("Efficienza:", efficiency.toFixed(2) + "%");
-    console.log("Tempo medio di attesa:", avgWaitingTime.toFixed(2));
-    console.log("Tempo medio di turnaround:", avgTurnaroundTime.toFixed(2));
-}
-
-function fcfs() {
-    if (currentProcess === null || currentProcess.remainTBurst === 0) {
-        currentProcess = null;
-
-        for (let p of process) {
-            if (p.canRun(t) && (currentProcess === null || p.tArrivo < currentProcess.tArrivo)) {
-                currentProcess = p;
-            }
-        }
-    }
-
-    if (currentProcess !== null && currentProcess.canRun(t)) {
-        currentProcess.isRunning = true;
-        currentProcess.remainTBurst = Math.max(0, currentProcess.remainTBurst - 1);
-    }
-
-    for (let p of process) {
-        p.isRunning = p === currentProcess && p.remainTBurst > 0;
+        document.getElementById("stateP" + i).innerHTML = process[i].getState();
     }
 }
