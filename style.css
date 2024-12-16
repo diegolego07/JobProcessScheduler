@@ -1,0 +1,116 @@
+body {
+    background-color: #121212; /* Sfondo scuro */
+    color: #e0e0e0; /* Testo chiaro */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Altezza completa della finestra */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centra tutto */
+}
+
+/* Contenitore principale */
+#mainContent {
+    display: flex;
+    flex-direction: column; /* Disposizione verticale */
+    justify-content: center; /* Centra tutto verticalmente */
+    align-items: center; /* Centra tutto orizzontalmente */
+    height: 100%; /* Altezza completa */
+    width: 100%; /* Larghezza completa */
+}
+
+/* Centrare la tabella delle statistiche in basso */
+#statistics {
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    margin-bottom: 20px; /* Spazio sotto */
+    width: 100%; /* Adatta la larghezza */
+}
+
+/* Stile della tabella */
+.styled-table {
+    border-collapse: collapse;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    width: 90%; /* Adatta la larghezza */
+    max-width: 800px; /* Larghezza massima */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Ombra */
+    background-color: #1f1f1f; /* Sfondo scuro */
+    border-radius: 8px;
+    overflow: hidden;
+    color: #e0e0e0; /* Testo chiaro */
+    margin: auto; /* Centra la tabella */
+}
+
+.styled-table thead tr {
+    background-color: #4CAF50; /* Verde scuro */
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #333; /* Bordi scuri */
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #2c2c2c; /* Alternanza righe grigio scuro */
+}
+
+.styled-table tbody tr:nth-of-type(odd) {
+    background-color: #1f1f1f; /* Alternanza righe grigio più scuro */
+}
+
+.styled-table tbody tr:hover {
+    background-color: #388E3C; /* Verde più scuro */
+    cursor: pointer;
+    color: #ffffff; /* Testo chiaro */
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #4CAF50;
+}
+
+/* Stile dei pulsanti */
+button {
+    text-align: center;
+    border-radius: 10px;
+    outline: none;
+    width: 100px;
+    margin: 15px;
+    cursor: pointer;
+    background: #1f1f1f; /* Sfondo scuro */
+    color: #e0e0e0; /* Testo chiaro */
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #4CAF50; /* Bordi colorati */
+    transition: all 0.2s ease; /* Transizione fluida */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4); /* Ombra iniziale */
+}
+
+button:hover {
+    transform: scale(1.1) translateY(-2px); /* Ingrandisce e solleva leggermente */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.6); /* Ombra più pronunciata */
+    background: #4CAF50; /* Cambia colore in verde scuro */
+    color: #121212; /* Testo scuro */
+}
+
+button:active {
+    transform: scale(1) translateY(2px); /* Riduce e abbassa */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8); /* Ombra ridotta e più scura */
+    background: #388E3C; /* Verde più scuro */
+    color: #ffffff; /* Testo chiaro */
+}
+
+#processTable {
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100%; /* Occupa tutta l'altezza disponibile */
+    width: 100%; /* Occupa tutta la larghezza disponibile */
+}

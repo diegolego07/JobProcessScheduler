@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Job&Process Scheduling CPU - Sordi - 4BI</title>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="titolo">
+            <h2>SCHEDULING FCFS SIMULATOR</h2>
+        </div>
+        <div id="mainContent" style="display: flex; flex-direction: row; justify-content: space-between;">
+            <!-- Sezione principale -->
+            <div id="processSection">
+                <div id="processTable">
+                    <table class="styled-table" border="1" id="idTable">
+                        <thead>
+                            <tr>
+                                <th>Process</th>
+                                <th>Arrival Time</th>
+                                <th>Burst Time</th>
+                                <th>Remaining Burst Time</th>
+                                <th>State</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="buttons">
+                    <button id="idReset" onclick="reset()">Reset</button>
+                    <button id="idStart" onclick="start()">Start</button>
+                    <button id="idStep" onclick="step()">Step</button>
+                </div>
+                <div id="timeController">
+                    <p id="idTime"></p>
+                </div>
+                <div id="statistics">
+                    <table class="styled-table" id="statsTable">
+                        <thead>
+                            <tr>
+                                <th>Efficienza (%)</th>
+                                <th>Tempo medio di attesa</th>
+                                <th>Tempo medio di turnaround</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="efficiencyCell">0.00</td>
+                                <td id="waitingTimeCell">0.00</td>
+                                <td id="turnaroundTimeCell">0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <script src="script.js"></script>
+    </body>
+</html>
