@@ -16,7 +16,7 @@ class Process {
     }
 
     canRun() {
-        return (t >= this.tArrivo && this.remainTBurst > 0);
+        return t >= this.tArrivo && this.remainTBurst > 0;
     }
 
     getLatency() {
@@ -104,7 +104,7 @@ function step() {
     t++;
     document.getElementById("idTime").innerHTML = "Tempo: " + t;
 
-    // Controlla se tutti i processi sono completati (remainTBurst == 0)
+    // Controlla se tutti i processi sono completati
     let allProcessesTerminated = true;
     for (let i = 0; i < process.length; i++) {
         if (process[i].remainTBurst !== 0) {
@@ -136,10 +136,10 @@ function stats() {
     for (let i = 0; i < process.length; i++) {
         totalBurstTime += process[i].tBurst; 
 
-        // Calcolo del tempo di turnaround: tempo attuale - tempo di arrivo
+        // Calcolo del tempo di turnaround
         let turnaroundTime = Math.max(0, currentTime - process[i].tArrivo);
 
-        // Calcolo del tempo di attesa: turnaround - tempo di burst
+        // Calcolo del tempo di attesa
         let waitingTime = turnaroundTime - process[i].tBurst;
         if (waitingTime < 0) waitingTime = 0;
 
@@ -147,7 +147,7 @@ function stats() {
         totalWaitingTime += waitingTime;
     }
 
-    // Calcolo efficienza: tempo di burst totale meno il tempo minimo diviso il tempo finale
+    // Calcolo efficienza
     const efficiency = ((totalBurstTime + minTime) / currentTime) * 100;
 
     // Calcolo dei tempi medi
@@ -159,7 +159,6 @@ function stats() {
     document.getElementById("waitingTimeCell").innerHTML = mediumWaitingTime.toFixed(2);
     document.getElementById("turnaroundTimeCell").innerHTML = mediumTurnaroundTime.toFixed(2);
 
-    // Output su console per debugging
     console.log("Efficienza:", efficiency.toFixed(2) + "%");
     console.log("Tempo medio di attesa:", mediumWaitingTime.toFixed(2));
     console.log("Tempo medio di turnaround:", mediumTurnaroundTime.toFixed(2));
@@ -188,7 +187,8 @@ function fcfs() {
     for (let i = 0; i < process.length; i++) {
         if (process[i] === currentProcess && process[i].remainTBurst > 0) {
             process[i].isRunning = true;
-        } else {
+        } 
+        else {
             process[i].isRunning = false;
         }
         document.getElementById("stateP" + i).innerHTML = process[i].getState();
