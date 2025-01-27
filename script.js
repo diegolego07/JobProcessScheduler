@@ -1,5 +1,5 @@
 class Process {
-    constructor(nome, tArrivo, tBurst) {
+    letructor(nome, tArrivo, tBurst) {
         this.nome = nome;
         this.tArrivo = tArrivo;
         this.tBurst = tBurst;
@@ -21,10 +21,6 @@ class Process {
 
     getLatency() {
         return this.latency;
-    }
-
-    incrementLatency() {
-        this.latency++;
     }
 }
 
@@ -75,7 +71,7 @@ function start() {
     });
 
     for (let i = 0; i < process.length; i++) {
-        const trEl = newTBodyEl.insertRow();
+        let trEl = newTBodyEl.insertRow();
         let tdEl = trEl.insertCell();
         tdEl.appendChild(document.createTextNode(process[i].nome));
         tdEl = trEl.insertCell();
@@ -148,11 +144,11 @@ function stats() {
     }
 
     // Calcolo efficienza
-    const efficiency = ((totalBurstTime + minTime) / currentTime) * 100;
+    let efficiency = ((totalBurstTime + minTime) / currentTime) * 100;
 
     // Calcolo dei tempi medi
-    const mediumWaitingTime = totalWaitingTime / process.length;
-    const mediumTurnaroundTime = totalTurnaroundTime / process.length;
+    let mediumWaitingTime = totalWaitingTime / process.length;
+    let mediumTurnaroundTime = totalTurnaroundTime / process.length;
 
     // Aggiorna i dati nella tabella
     document.getElementById("efficiencyCell").innerHTML = efficiency.toFixed(2);
